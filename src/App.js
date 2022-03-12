@@ -1,25 +1,38 @@
-import logo from './logo.svg';
+// ## To run this project on your local machine first do "npm install" and then do "npm start" without the double quotes ##
+
+
+// ## Dependencies and other file imports here ##
 import './App.css';
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom"
+// import { useState } from 'react';
+
+// ## All Page Imports here ##
+import LoginPage from "./pages/LoginPage"
+import SignupPage from "./pages/SignupPage"
+
+// ## All Component imports here ##
 
 function App() {
+  // ## state for knowing whether user is loggedin or not ##
+  // const [isLoggedIn, setIsLoggedIn] = useState(false);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div className='app'>
+        <Routes>
+          {/* ## For redirecting User based on whether user is loggedin or not ## */}
+          {/* <Route path="/" exact element={isLoggedIn ? <Navigate replace to="/signup" /> : <Navigate replace to="/login" />} /> */}
+
+          {/* Routes declaration for all the pages */}
+          <Route path="/login" exact element={<LoginPage />} /> {/* http://localhost:3000/login */}
+          <Route path="/signup" exact element={<SignupPage />} /> {/* http://localhost:3000/signup */}
+          {/* ## Add new routes here if needed ## */}
+        </Routes>
+      </div>
+    </Router>
   );
 }
 
 export default App;
+
+// ## Add new components in the "/src/components" directory ##
+// ## Add new pages in the "/src/pages" directory ##
