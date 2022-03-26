@@ -3,10 +3,12 @@
 // ## This is not required anymore in newer versions of React ##
 // import React from 'react'
 
-const SignupPage = () => {
+const SingupPage = () => {
   return (
+    <>
     <div>SignupPage</div>
+    </>
   )
 }
 
-export default SignupPage
+export default SingupPage;
