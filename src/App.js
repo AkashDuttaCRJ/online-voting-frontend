@@ -9,6 +9,8 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 // ## All Page Imports here ##
 import LoginPage from "./pages/LoginPage"
 import SignupPage from "./pages/SignupPage"
+import HomePage from './pages/HomePage';
+import DetailsPage from './pages/DetailsPage';
 
 // ## All Component imports here ##
 
@@ -23,6 +25,8 @@ function App() {
           {/* <Route path="/" exact element={isLoggedIn ? <Navigate replace to="/signup" /> : <Navigate replace to="/login" />} /> */}
 
           {/* Routes declaration for all the pages */}
+          <Route path='/' exact element={<HomePage />} />
+          <Route path='/details' exact element={<DetailsPage />} />
           <Route path="/login" exact element={<LoginPage />} /> {/* http://localhost:3000/login */}
           <Route path="/signup" exact element={<SignupPage />} /> {/* http://localhost:3000/signup */}
           {/* ## Add new routes here if needed ## */}

@@ -1,10 +1,28 @@
-.App {
-  text-align: center;
+.divider {
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: rgb(133, 133, 133);
+  position: relative;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.divider::before, .divider::after {
+  content: '';
+  width: 50px;
+  height: 0;
+  border-bottom: 1px solid rgb(185, 185, 185);
+  position: absolute;
+  top: 50%;
+}
+
+.divider::before {
+  right: 0;
+  transform: translate(-50%, -50%);
+}
+
+.divider::after {
+  left: 0;
+  transform: translate(50%, -50%);
 }
 
 @media (prefers-reduced-motion: no-preference) {
