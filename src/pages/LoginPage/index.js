@@ -4,7 +4,7 @@ import PrimaryButton from "../../components/PrimaryButton"
 import SecondaryButton from "../../components/SecondaryButton"
 import { useNavigate } from "react-router-dom"
 import OtpDialog from "../../components/OtpDialog"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { InputAdornment } from "@mui/material"
 
 const LoginPage = () => {
@@ -16,6 +16,15 @@ const LoginPage = () => {
   const [otpLoading, setOtpLoading] = useState(false)
   const [dataError, setDataError] = useState('')
   const [otpError, setOtpError] = useState('')
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if(token) {
+      navigate('/', { replace: true });
+      return
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
 
   const sendotp = async (phone) => {
     try {
@@ -58,6 +67,8 @@ const LoginPage = () => {
         setOtpError('');
         setOtpLoading(false);
         setOpenDialog(false);
+        localStorage.setItem('token', resp.token);
+        localStorage.setItem('data', JSON.stringify(resp.data));
         navigate('/', { replace: true });
       }
       if(resp.data.response_code === 'rejected') {

@@ -1,28 +1,88 @@
 
 import { ArrowBack } from "@mui/icons-material"
 import { Button, Card, CardActions, CardContent, CircularProgress, FormControl, FormControlLabel, IconButton, LinearProgress, Radio, RadioGroup, Stack, Typography } from "@mui/material"
+import moment from "moment"
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 
 const DetailsPage = () => {
-    const [completed, setCompleted] = useState(false)
+    const [completed, setCompleted] = useState(null)
     const [data, setData] = useState(null)
+    const [token, setToken] = useState(null)
+    const [userId, setUserId] = useState(null)
     const [candidateId, setcandidateId] = useState(null)
+    const [voteError, setVoteError] = useState('')
     const navigate = useNavigate()
     const params = useParams()
     const voteId = params.id
 
     useEffect(() => {
-        const getData = async () => {
-            const response = await fetch(`http://localhost:5000/getvotedata?voteId=${voteId}&completed=${completed}`)
-            const resp = await response.json()
-            setData(resp)
+        const tempToken = localStorage.getItem('token');
+        if (!tempToken) {
+            navigate('/login', { replace: true });
+            return
         }
-        getData()
+        setToken(tempToken)
+        const tempUserData = JSON.parse(localStorage.getItem('data'));
+        setUserId(tempUserData[0].id)
+        setVoteError('')
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    console.log(candidateId);
+    useEffect(() => {
+        const isCompleted = async () => {
+            const response = await fetch(`http://localhost:5000/isCompleted?voteId=${voteId}&userId=${userId}`)
+            const resp = await response.json()
+            console.log(resp);
+            setCompleted(resp.isCompleted)
+        }
+        token && userId && isCompleted()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[token])
+
+    useEffect(() => {
+        const getData = async () => {
+            const response = await fetch(`http://localhost:5000/getvotedata?voteId=${voteId}&userId=${userId}&completed=${completed}`,{
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            const resp = await response.json()
+            setData(resp)
+            if(moment(resp.endDate).diff(moment(), 'seconds') <= 0) {
+                setCompleted(true)
+            }
+            if (resp.status) {
+                setVoteError(resp.status)
+            }
+        }
+        token && getData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[completed])
+
+    const addVote = async () => {
+        const response = await fetch(`http://localhost:5000/addvote`,{
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                'voteId': voteId,
+                'userId': userId,
+                'candidateId': candidateId
+            })
+        })
+        const resp = await response.json()
+        if (resp.error) {
+            setVoteError(resp.error)
+            return
+        }
+        setVoteError('')
+        setCompleted(true)
+    }
+
+    console.log(data);
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center', marginTop: '10rem' }}>
@@ -59,9 +119,12 @@ const DetailsPage = () => {
                     ))}
                 </RadioGroup>
                 </FormControl>}
+                {voteError && <Typography variant="body2" color="red" marginTop={2}>
+                    {voteError}
+                </Typography>}
             </CardContent>
             {!completed && data && <CardActions sx={{ justifyContent: 'center', marginBottom: '20px' }}>
-                <Button variant='contained' onClick={() => setCompleted(true)}>Vote</Button>
+                <Button variant='contained' onClick={addVote} disabled={!candidateId && true}>Vote</Button>
             </CardActions>}
         </Card>
     </div>

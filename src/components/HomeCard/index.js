@@ -4,7 +4,7 @@ import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-const HomeCard = ({ type, title, start, end, id }) => {
+const HomeCard = ({ type, title, start, end, id, setReset }) => {
   const [time, setTime] = useState(null)
   var diff = null
     const navigate = useNavigate()
@@ -38,6 +38,10 @@ const HomeCard = ({ type, title, start, end, id }) => {
       }
     },[])
 
+    if (time === '0s') {
+      setReset(true)
+    }
+
   return (
     <Card sx={{ width: 275 }}>
         <CardContent>
@@ -54,7 +58,7 @@ const HomeCard = ({ type, title, start, end, id }) => {
             <span style={{ marginRight: '5px' }}><ErrorOutline /></span>Expired
             </Typography>}
         </CardContent>
-        <CardActions sx={type === 'ongoing' && { justifyContent: 'flex-end'}}>
+        <CardActions>
             {type === 'previous' ? <Button onClick={() => navigate(`/details/${id}`)}>Check Results</Button> : type === 'ongoing' ? <Button variant="contained" color="primary" onClick={() => navigate(`/details/${id}`)}>View</Button> : null}
         </CardActions>
     </Card>
