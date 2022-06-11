@@ -31,7 +31,7 @@ const DetailsPage = () => {
 
     useEffect(() => {
         const isCompleted = async () => {
-            const response = await fetch(`http://localhost:5000/isCompleted?voteId=${voteId}&userId=${userId}`)
+            const response = await fetch(`https://online-voting-backend.herokuapp.com/isCompleted?voteId=${voteId}&userId=${userId}`)
             const resp = await response.json()
             console.log(resp);
             setCompleted(resp.isCompleted)
@@ -42,7 +42,7 @@ const DetailsPage = () => {
 
     useEffect(() => {
         const getData = async () => {
-            const response = await fetch(`http://localhost:5000/getvotedata?voteId=${voteId}&userId=${userId}&completed=${completed}`,{
+            const response = await fetch(`https://online-voting-backend.herokuapp.com/getvotedata?voteId=${voteId}&userId=${userId}&completed=${completed}`,{
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -61,7 +61,7 @@ const DetailsPage = () => {
     },[completed])
 
     const addVote = async () => {
-        const response = await fetch(`http://localhost:5000/addvote`,{
+        const response = await fetch(`https://online-voting-backend.herokuapp.com/addvote`,{
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,

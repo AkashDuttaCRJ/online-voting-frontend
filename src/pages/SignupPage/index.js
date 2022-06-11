@@ -22,7 +22,7 @@ const SignupPage = () => {
 
   useEffect(() => {
     const getVoterData = async () => {
-      const resp = await (await fetch(`http://localhost:5000/getvoterdata?voterId=${voterId}`)).json();
+      const resp = await (await fetch(`https://online-voting-backend.herokuapp.com/getvoterdata?voterId=${voterId}`)).json();
       setName(resp?.fullName);
       setAddress(resp?.address);
       setPhoneNumber(resp?.mobile);
@@ -35,7 +35,7 @@ const SignupPage = () => {
     try {
       setDataError('');
       setLoading(true);
-      const resp = await (await fetch('http://localhost:5000/getotp', {
+      const resp = await (await fetch('https://online-voting-backend.herokuapp.com/getotp', {
         headers: {
           'phone': phone,
           'type': 'signup'
@@ -58,7 +58,7 @@ const SignupPage = () => {
     try {
       setOtpError('');
       setOtpLoading(true);
-      const resp = await (await fetch('http://localhost:5000/signup', {
+      const resp = await (await fetch('https://online-voting-backend.herokuapp.com/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

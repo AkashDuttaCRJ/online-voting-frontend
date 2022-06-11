@@ -34,7 +34,7 @@ const HomePage = () => {
     },[reset])
 
     const getData = async () => {
-        const resp = await fetch('http://localhost:5000/', {
+        const resp = await fetch('https://online-voting-backend.herokuapp.com/', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
