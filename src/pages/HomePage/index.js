@@ -75,7 +75,7 @@ const HomePage = () => {
                 <Grid container spacing={3} padding={2} marginBottom={4}>
                     {item.data.map((vote, index) => (
                         <Grid item key={vote.id}>
-                            <HomeCard title={vote.title} id={vote.id} type={item.title.toLowerCase()} />
+                            <HomeCard title={vote.title} id={vote.id} type={item.title.toLowerCase()} start={vote.startDate} end={vote.endDate} />
                         </Grid>
                     ))}
                 </Grid>

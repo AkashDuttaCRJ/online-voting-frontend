@@ -2,13 +2,15 @@
 import { ArrowBack } from "@mui/icons-material"
 import { Button, Card, CardActions, CardContent, CircularProgress, FormControl, FormControlLabel, IconButton, LinearProgress, Radio, RadioGroup, Stack, Typography } from "@mui/material"
 import { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 
 const DetailsPage = () => {
     const [completed, setCompleted] = useState(false)
     const [data, setData] = useState(null)
-    const voteId = "67a24622-a4c2-4f23-96d4-26740c1d375c"
+    const [candidateId, setcandidateId] = useState(null)
     const navigate = useNavigate()
+    const params = useParams()
+    const voteId = params.id
 
     useEffect(() => {
         const getData = async () => {
@@ -20,7 +22,7 @@ const DetailsPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    console.log(data);
+    console.log(candidateId);
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center', marginTop: '10rem' }}>
@@ -36,7 +38,7 @@ const DetailsPage = () => {
                     {data && data?.candidates.map((candidate, index) => (
                         <div style={{ marginBottom: '20px'}} key={index}>
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
-                            {candidate.Name}
+                            {candidate.name}
                             <Typography variant="body2" color="text.secondary" marginTop={2}>
                             {candidate.no_of_votes} Votes
                             </Typography>
@@ -50,10 +52,10 @@ const DetailsPage = () => {
                     aria-labelledby="demo-controlled-radio-buttons-group"
                     name="controlled-radio-buttons-group"
                     // value={}
-                    onChange={() => {}}
+                    onChange={(event) => setcandidateId(event.target.value)}
                 >
                     {data && data?.candidates.map((candidate, index) => (
-                        <FormControlLabel key={index} value={candidate.id} control={<Radio />} label={candidate.Name} />
+                        <FormControlLabel key={index} value={candidate.id} control={<Radio />} label={candidate.name} />
                     ))}
                 </RadioGroup>
                 </FormControl>}

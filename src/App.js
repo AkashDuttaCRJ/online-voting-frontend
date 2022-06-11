@@ -26,7 +26,7 @@ function App() {
 
           {/* Routes declaration for all the pages */}
           <Route path='/' exact element={<HomePage />} />
-          <Route path='/details' exact element={<DetailsPage />} />
+          <Route path='/details/:id' exact element={<DetailsPage />} />
           <Route path="/login" exact element={<LoginPage />} /> {/* http://localhost:3000/login */}
           <Route path="/signup" exact element={<SignupPage />} /> {/* http://localhost:3000/signup */}
           {/* ## Add new routes here if needed ## */}
