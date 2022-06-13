@@ -38,9 +38,14 @@ const HomeCard = ({ type, title, start, end, id, setReset }) => {
       }
     },[])
 
-    if (time === '0s') {
-      setReset(true)
-    }
+    useEffect(() => {
+      if(time === '0s') {
+        setTimeout(() => {
+          setReset(true)
+        }, 2000)
+      }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [time])
 
   return (
     <Card sx={{ width: 275 }}>

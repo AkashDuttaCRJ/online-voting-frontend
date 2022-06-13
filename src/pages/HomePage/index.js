@@ -1,4 +1,4 @@
-import { ExitToApp } from '@mui/icons-material';
+import { ExitToApp, Person } from '@mui/icons-material';
 import { AppBar, Avatar, CircularProgress, Divider, Grid, IconButton, Stack, Toolbar, Tooltip, Typography } from '@mui/material'
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -79,7 +79,7 @@ const HomePage = () => {
         navigate('/login', { replace: true });
     }
 
-    console.log(response);
+    console.log(reset);
       
     return (
     <div>
@@ -91,7 +91,7 @@ const HomePage = () => {
                 <div>
                     <Tooltip title={fullName}>
                         <IconButton edge="end" color="inherit" aria-label="account" sx={{ marginRight: '10px' }}>
-                            <Avatar {...stringAvatar(fullName || 'Sample Data')} />
+                            {fullName === '' ? <Person /> :<Avatar {...stringAvatar(fullName)} />}
                         </IconButton>
                     </Tooltip>
                     <Tooltip title="Logout">
@@ -103,8 +103,11 @@ const HomePage = () => {
             </Toolbar>
         </AppBar>
         <Stack padding={3}>
-            {response === [] && <CircularProgress />}
-            {response !== [] && response.map((item, index) => (
+            {response.length === 0 &&
+            <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '10px'}}>
+                <CircularProgress />
+            </div>}
+            {response.length !== 0 && response.map((item, index) => (
                 <div key={index}>
                 <Typography variant="h4" gutterBottom component="div">
                     {item.title}
