@@ -30,7 +30,7 @@ const LoginPage = () => {
     try {
       setDataError('');
       setLoading(true);
-      const resp = await (await fetch('https://online-voting-backend.herokuapp.com/getotp', {
+      const resp = await (await fetch('https://instavote-be.herokuapp.com/getotp', {
         headers: {
           'phone': phone,
           'type': 'login'
@@ -53,7 +53,7 @@ const LoginPage = () => {
     try {
       setOtpError('');
       setOtpLoading(true);
-      const resp = await (await fetch('https://online-voting-backend.herokuapp.com/login', {
+      const resp = await (await fetch('https://instavote-be.herokuapp.com/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

@@ -34,7 +34,7 @@ const HomePage = () => {
     },[reset])
 
     const getData = async () => {
-        const resp = await fetch('https://online-voting-backend.herokuapp.com/', {
+        const resp = await fetch('https://instavote-be.herokuapp.com/', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -78,6 +78,8 @@ const HomePage = () => {
         localStorage.removeItem('data');
         navigate('/login', { replace: true });
     }
+
+    console.log(response);
       
     return (
     <div>
