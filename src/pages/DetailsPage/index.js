@@ -1,9 +1,9 @@
 
 import { ArrowBack } from "@mui/icons-material"
 import { Button, Card, CardActions, CardContent, CircularProgress, FormControl, FormControlLabel, IconButton, LinearProgress, Radio, RadioGroup, Stack, Typography } from "@mui/material"
-import moment from "moment"
+// import moment from "moment"
 import { useEffect, useState } from "react"
-import { useNavigate, useParams } from "react-router-dom"
+import { useLocation, useNavigate, useParams } from "react-router-dom"
 
 const DetailsPage = () => {
     const [completed, setCompleted] = useState(null)
@@ -14,6 +14,8 @@ const DetailsPage = () => {
     const [voteError, setVoteError] = useState('')
     const navigate = useNavigate()
     const params = useParams()
+    const params2 = useLocation()
+    const { type } = params2.state
     const voteId = params.id
 
     useEffect(() => {
@@ -30,13 +32,20 @@ const DetailsPage = () => {
     }, [])
 
     useEffect(() => {
-        const isCompleted = async () => {
-            const response = await fetch(`https://instavote-be.herokuapp.com/isCompleted?voteId=${voteId}&userId=${userId}`)
-            const resp = await response.json()
-            console.log(resp);
-            setCompleted(resp.isCompleted)
+        // const isCompleted = async () => {
+        //     const response = await fetch(`https://instavote-be.herokuapp.com/isCompleted?voteId=${voteId}&userId=${userId}`)
+        //     const resp = await response.json()
+        //     console.log(resp);
+        //     setCompleted(resp.isCompleted)
+        // }
+        // token && userId && isCompleted()
+
+        if (type === 'previous') {
+            setCompleted(true)
         }
-        token && userId && isCompleted()
+        if (type === 'ongoing') {
+            setCompleted(false)
+        }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     },[token])
 
@@ -49,9 +58,6 @@ const DetailsPage = () => {
             })
             const resp = await response.json()
             setData(resp)
-            if(moment(resp.endDate).diff(moment(), 'seconds') <= 0) {
-                setCompleted(true)
-            }
             if (resp.status) {
                 setVoteError(resp.status)
             }
@@ -61,6 +67,7 @@ const DetailsPage = () => {
     },[completed])
 
     const addVote = async () => {
+        setVoteError('')
         const response = await fetch(`https://instavote-be.herokuapp.com/addvote`,{
             method: 'POST',
             headers: {
@@ -78,11 +85,8 @@ const DetailsPage = () => {
             setVoteError(resp.error)
             return
         }
-        setVoteError('')
         setCompleted(true)
     }
-
-    console.log(data);
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center', marginTop: '10rem' }}>
@@ -94,7 +98,7 @@ const DetailsPage = () => {
                 <Typography variant="h5" component="div" marginLeft={1.5} marginTop={2} textAlign={!data && 'center'}>
                 {data ? data.title : <CircularProgress />}
                 </Typography>
-                {completed ? <Stack paddingLeft={4} paddingRight={4} marginTop={1}>
+                {(completed && type === 'previous') && <Stack paddingLeft={4} paddingRight={4} marginTop={1}>
                     {data && data?.candidates.map((candidate, index) => (
                         <div style={{ marginBottom: '20px'}} key={index}>
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
@@ -106,8 +110,8 @@ const DetailsPage = () => {
                         <LinearProgress variant="determinate" value={candidate.votes_perc} sx={{ marginTop: '10px'}} />
                     </div>
                     ))}
-                </Stack> : 
-                <FormControl sx={{ marginLeft: '35px'}}>
+                </Stack>}
+                {(!completed && !voteError && type === 'ongoing') && <FormControl sx={{ marginLeft: '35px'}}>
                 <RadioGroup
                     aria-labelledby="demo-controlled-radio-buttons-group"
                     name="controlled-radio-buttons-group"
@@ -119,11 +123,14 @@ const DetailsPage = () => {
                     ))}
                 </RadioGroup>
                 </FormControl>}
+                {(completed && type === 'ongoing') && <Typography variant="body2" color="red" marginTop={2}>
+                    You have already voted!
+                </Typography>}
                 {voteError && <Typography variant="body2" color="red" marginTop={2}>
-                    {voteError}
+                    {voteError === 'You didn\'t cast any vote!' && type === 'ongoing' ? '' : voteError}
                 </Typography>}
             </CardContent>
-            {!completed && data && <CardActions sx={{ justifyContent: 'center', marginBottom: '20px' }}>
+            {!completed && !voteError && data && <CardActions sx={{ justifyContent: 'center', marginBottom: '20px' }}>
                 <Button variant='contained' onClick={addVote} disabled={!candidateId && true}>Vote</Button>
             </CardActions>}
         </Card>

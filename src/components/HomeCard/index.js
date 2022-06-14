@@ -4,7 +4,7 @@ import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-const HomeCard = ({ type, title, start, end, id, setReset }) => {
+const HomeCard = ({ type, title, start, end, id, setReset, isVoted }) => {
   const [time, setTime] = useState(null)
   var diff = null
     const navigate = useNavigate()
@@ -64,7 +64,7 @@ const HomeCard = ({ type, title, start, end, id, setReset }) => {
             </Typography>}
         </CardContent>
         <CardActions>
-            {type === 'previous' ? <Button onClick={() => navigate(`/details/${id}`)}>Check Results</Button> : type === 'ongoing' ? <Button variant="contained" color="primary" onClick={() => navigate(`/details/${id}`)}>View</Button> : null}
+            {type === 'previous' ? <Button onClick={() => navigate(`/details/${id}`, { state: { 'type': type}})}>Check Results</Button> : type === 'ongoing' ? isVoted ? <Typography variant="body2" color="red" marginTop={2}>You have already voted!</Typography> : <Button variant="contained" color="primary" onClick={() => navigate(`/details/${id}`, { state: { 'type': type}})}>View</Button> : null}
         </CardActions>
     </Card>
   )
