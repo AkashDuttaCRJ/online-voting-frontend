@@ -22,19 +22,19 @@ const HomePage = () => {
         const tempUserData = JSON.parse(localStorage.getItem('data'));
         setFullName(tempUserData[0].fullName)
         setUserId(tempUserData[0].id)
-        getData()
+        tempToken && getData(tempToken, tempUserData[0].id)
     // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
 
     useEffect(() => {
-        reset && getData();
+        reset && getData(token, userId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     },[reset])
 
-    const getData = async () => {
-        const resp = await fetch(`https://instavote-be.herokuapp.com/?userId=${userId}`, {
+    const getData = async (token1, userid) => {
+        const resp = await fetch(`https://instavote-be.herokuapp.com/?userId=${userid}`, {
             headers: {
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${token1}`
             }
         });
         const data = await resp.json();
@@ -114,7 +114,7 @@ const HomePage = () => {
                 <Grid container spacing={3} padding={2} marginBottom={4}>
                     {item.data.map((vote, index) => (
                         <Grid item key={vote.id}>
-                            <HomeCard title={vote.title} id={vote.id} type={item.title.toLowerCase()} start={vote.startDate} end={vote.endDate} setReset={setReset} isVoted={vote.isCompleted ? vote.isCompleted : false} />
+                            <HomeCard title={vote.title} id={vote.id} type={item.title.toLowerCase()} start={vote.startDate} end={vote.endDate} setReset={setReset} isVoted={vote.isCompleted} />
                         </Grid>
                     ))}
                 </Grid>
