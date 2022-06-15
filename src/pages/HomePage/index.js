@@ -22,13 +22,9 @@ const HomePage = () => {
         const tempUserData = JSON.parse(localStorage.getItem('data'));
         setFullName(tempUserData[0].fullName)
         setUserId(tempUserData[0].id)
+        getData()
     // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
-
-    useEffect(() => {
-        token && getData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[token])
 
     useEffect(() => {
         reset && getData();
