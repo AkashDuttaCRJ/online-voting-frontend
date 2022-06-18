@@ -22,6 +22,9 @@ const SignupPage = () => {
 
   useEffect(() => {
     const getVoterData = async () => {
+      setName('');
+      setAddress('');
+      setPhoneNumber('');
       const resp = await (await fetch(`https://instavote-be.herokuapp.com/getvoterdata?voterId=${voterId}`)).json();
       setName(resp?.fullName);
       setAddress(resp?.address);
